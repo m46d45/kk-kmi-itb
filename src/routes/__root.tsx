@@ -20,7 +20,7 @@ export const Route = createRootRoute({
           "Construction and Infrastructure Management Research Group, Faculty of Civil and Environmental Engineering, Institut Teknologi Bandung.",
       },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
-      { name: "theme-color", content: "#101820" },
+      { name: "theme-color", content: "#00316d" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
       { property: "og:title", content: APP_NAME },

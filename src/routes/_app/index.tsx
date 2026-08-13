@@ -43,7 +43,7 @@ function HomePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/news"
-              className="inline-flex min-h-11 items-center gap-2 rounded-md bg-on-accent px-5 py-2.5 text-sm font-medium text-ink hover:bg-surface"
+              className="inline-flex min-h-11 items-center gap-2 rounded-md bg-accent-2 px-5 py-2.5 text-sm font-medium text-ink hover:bg-accent-2/90"
             >
               Read the news
               <ArrowRight className="size-4" />

@@ -3,7 +3,7 @@ import { contactInfo } from "@/data/research";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-line bg-bg-deep text-on-accent">
+    <footer className="mt-20 border-t-2 border-accent-2 bg-bg-deep text-on-accent">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-12">
         <div className="md:col-span-5">
           <p className="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-on-accent/55">

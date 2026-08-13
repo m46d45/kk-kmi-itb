@@ -20,7 +20,7 @@ export function FacultyCard({ member }: { member: FacultyMember }) {
       className="group flex h-full flex-col rounded-xl border border-line bg-surface p-5 shadow-soft transition-colors hover:border-accent/30"
     >
       <div className="flex items-start gap-4">
-        <span className="grid size-14 shrink-0 place-items-center rounded-lg bg-bg-deep font-display text-lg text-on-accent">
+        <span className="grid size-14 shrink-0 place-items-center rounded-lg bg-bg-deep font-display text-lg text-accent-2">
           {initials(member.shortName)}
         </span>
         <div className="min-w-0">

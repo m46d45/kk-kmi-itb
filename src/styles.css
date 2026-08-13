@@ -2,19 +2,19 @@
 @import "tw-animate-css";
 
 @theme {
-  --color-bg: #f3eee4;
-  --color-bg-deep: #101820;
-  --color-surface: #faf7f1;
-  --color-surface-2: #efe8db;
-  --color-ink: #142033;
-  --color-ink-soft: #3a4656;
-  --color-muted: #6b7380;
-  --color-line: #d6cec0;
-  --color-accent: #1d4f6e;
-  --color-accent-hover: #163e57;
-  --color-accent-2: #8d4428;
-  --color-on-accent: #f7f2ea;
-  --color-focus: #1d4f6e;
+  --color-bg: #f5f9ff;
+  --color-bg-deep: #00316d;
+  --color-surface: #ffffff;
+  --color-surface-2: #eaf0f8;
+  --color-ink: #153a29;
+  --color-ink-soft: #2d4a3d;
+  --color-muted: #5b6d66;
+  --color-line: #d4deea;
+  --color-accent: #00316d;
+  --color-accent-hover: #002452;
+  --color-accent-2: #c0a35b;
+  --color-on-accent: #ffffff;
+  --color-focus: #00316d;
 
   --font-display: "Newsreader", "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
@@ -24,7 +24,7 @@
   --radius-lg: 1.25rem;
   --radius-xl: 1.75rem;
 
-  --shadow-soft: 0 18px 40px -28px rgb(20 32 51 / 0.45);
+  --shadow-soft: 0 18px 40px -28px rgb(0 49 109 / 0.4);
 }
 
 @layer base {
@@ -65,7 +65,7 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--color-accent) 22%, transparent);
+    background: color-mix(in oklab, var(--color-accent-2) 35%, transparent);
   }
 }
 

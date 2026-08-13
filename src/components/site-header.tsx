@@ -21,17 +21,19 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line/80 bg-bg/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <header className="sticky top-0 z-40 border-b-2 border-accent-2 bg-bg-deep text-on-accent">
+      <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link to="/" className="flex min-w-0 items-center gap-3" onClick={() => setOpen(false)}>
-          <span className="grid size-10 shrink-0 place-items-center rounded-md bg-ink text-bg">
-            <span className="font-display text-sm font-medium tracking-tight">KMI</span>
-          </span>
+          <img
+            src="/brand/ftsl-mark.png"
+            alt="FTSL ITB"
+            className="h-10 w-auto shrink-0 sm:h-11"
+          />
           <span className="min-w-0">
-            <span className="block truncate text-xs font-medium uppercase tracking-[0.16em] text-muted">
-              FTSL ITB
+            <span className="block truncate text-xs font-medium uppercase tracking-[0.16em] text-accent-2">
+              KK KMI
             </span>
-            <span className="block truncate font-display text-base leading-tight text-ink sm:text-lg">
+            <span className="block truncate font-display text-base leading-tight text-on-accent sm:text-lg">
               Construction & Infrastructure Management
             </span>
           </span>
@@ -46,7 +48,7 @@ export function SiteHeader() {
                 to={item.to}
                 className={cn(
                   "rounded-md px-3 py-2 text-sm transition-colors duration-150",
-                  active ? "bg-surface-2 text-ink" : "text-ink-soft hover:bg-surface-2 hover:text-ink",
+                  active ? "bg-white/12 text-on-accent" : "text-on-accent/75 hover:bg-white/10 hover:text-on-accent",
                 )}
               >
                 {item.label}
@@ -60,15 +62,15 @@ export function SiteHeader() {
             href={contactInfo.linkedin}
             target="_blank"
             rel="noreferrer"
-            className="text-sm text-ink-soft hover:text-ink"
+            className="text-sm text-on-accent/80 hover:text-on-accent"
           >
             LinkedIn
           </a>
           {isPending ? (
-            <div className="h-8 w-24 animate-pulse rounded-md bg-surface-2" />
+            <div className="h-8 w-24 animate-pulse rounded-md bg-white/10" />
           ) : user ? (
             <div className="flex items-center gap-3">
-              <Link to="/admin" className="text-sm text-accent hover:underline">
+              <Link to="/admin" className="text-sm text-accent-2 hover:underline">
                 News desk
               </Link>
               <UserButton />
@@ -76,7 +78,7 @@ export function SiteHeader() {
           ) : (
             <Link
               to="/login"
-              className="rounded-md bg-accent px-3 py-2 text-sm font-medium text-on-accent transition-colors hover:bg-accent-hover"
+              className="rounded-md bg-accent-2 px-3 py-2 text-sm font-medium text-ink transition-colors hover:bg-accent-2/90"
             >
               Editor sign-in
             </Link>
@@ -85,7 +87,7 @@ export function SiteHeader() {
 
         <button
           type="button"
-          className="grid size-11 place-items-center rounded-md border border-line bg-surface text-ink lg:hidden"
+          className="grid size-11 place-items-center rounded-md border border-white/20 bg-white/5 text-on-accent lg:hidden"
           aria-expanded={open}
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((v) => !v)}
@@ -95,24 +97,24 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <div className="border-t border-line bg-surface px-4 py-4 lg:hidden">
+        <div className="border-t border-white/15 bg-bg-deep px-4 py-4 lg:hidden">
           <nav className="flex flex-col gap-1">
             {nav.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="rounded-md px-3 py-3 text-base text-ink hover:bg-surface-2"
+                className="rounded-md px-3 py-3 text-base text-on-accent hover:bg-white/10"
                 onClick={() => setOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
             {user ? (
-              <Link to="/admin" className="rounded-md px-3 py-3 text-base text-accent" onClick={() => setOpen(false)}>
+              <Link to="/admin" className="rounded-md px-3 py-3 text-base text-accent-2" onClick={() => setOpen(false)}>
                 News desk
               </Link>
             ) : (
-              <Link to="/login" className="rounded-md px-3 py-3 text-base text-accent" onClick={() => setOpen(false)}>
+              <Link to="/login" className="rounded-md px-3 py-3 text-base text-accent-2" onClick={() => setOpen(false)}>
                 Editor sign-in
               </Link>
             )}
@@ -120,7 +122,7 @@ export function SiteHeader() {
               href={contactInfo.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="rounded-md px-3 py-3 text-base text-ink hover:bg-surface-2"
+              className="rounded-md px-3 py-3 text-base text-on-accent hover:bg-white/10"
               onClick={() => setOpen(false)}
             >
               LinkedIn
