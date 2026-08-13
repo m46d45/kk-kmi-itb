@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PartnerGrid } from "@/components/partner-grid";
+import { SectionHeading } from "@/components/section-heading";
 import { faculty } from "@/data/faculty";
 import { aboutCopy, contactInfo } from "@/data/research";
 
@@ -106,6 +108,17 @@ function AboutPage() {
           >
             Group LinkedIn page
           </a>
+        </div>
+      </section>
+
+      <section id="partners" className="mt-16">
+        <SectionHeading
+          kicker="Collaboration"
+          title="Partners"
+          description="National institutions and international universities the group works with in research, teaching, and industry practice."
+        />
+        <div className="mt-10">
+          <PartnerGrid />
         </div>
       </section>
     </main>

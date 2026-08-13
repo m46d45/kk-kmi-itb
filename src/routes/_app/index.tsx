@@ -6,6 +6,7 @@ import { NewsCard } from "@/components/news-card";
 import { SectionHeading } from "@/components/section-heading";
 import { faculty, facultyStats } from "@/data/faculty";
 import { aboutCopy, contactInfo, researchAreas } from "@/data/research";
+import { PartnerStrip } from "@/components/partner-grid";
 import { listPublishedNews } from "@/lib/news";
 
 export const Route = createFileRoute("/_app/")({
@@ -161,6 +162,22 @@ function HomePage() {
         ) : (
           <p className="mt-8 text-ink-soft">No published news yet.</p>
         )}
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <SectionHeading
+          kicker="Collaboration"
+          title="Partners"
+          description="National institutions and international universities."
+          action={
+            <Link to="/about" hash="partners" className="text-sm font-medium text-accent">
+              Full list
+            </Link>
+          }
+        />
+        <div className="mt-8">
+          <PartnerStrip />
+        </div>
       </section>
 
       <section className="bg-bg-deep py-16 text-on-accent">
