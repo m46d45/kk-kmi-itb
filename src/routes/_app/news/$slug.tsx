@@ -1,12 +1,15 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { formatNewsDate } from "@/components/news-card";
+import { ShareButtons } from "@/components/share-buttons";
 import { getNewsBySlug, listPublishedNews } from "@/lib/news";
 
 export const Route = createFileRoute("/_app/news/$slug")({
   loader: async ({ params }) => {
     const item = await getNewsBySlug({ data: params.slug });
     if (!item) throw notFound();
-    const related = (await listPublishedNews({ data: { limit: 4 } })).filter((n) => n.slug !== item.slug).slice(0, 3);
+    const related = (await listPublishedNews({ data: { limit: 4 } }))
+      .filter((n) => n.slug !== item.slug)
+      .slice(0, 3);
     return { item, related };
   },
   component: NewsDetail,
@@ -17,7 +20,10 @@ export const Route = createFileRoute("/_app/news/$slug")({
 
 function NewsDetail() {
   const { item, related } = Route.useLoaderData();
-  const paragraphs = item.body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  const paragraphs = item.body
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
@@ -30,12 +36,30 @@ function NewsDetail() {
       </p>
       <h1 className="mt-3 font-display text-4xl sm:text-5xl">{item.title}</h1>
       <p className="mt-4 text-ink-soft">{item.author_name}</p>
-      <img src={item.cover_url} alt="" className="mt-8 aspect-16/9 w-full rounded-xl object-cover" />
+
+      <ShareButtons
+        path={`/news/${item.slug}`}
+        title={item.title}
+        className="mt-6"
+      />
+
+      <img
+        src={item.cover_url}
+        alt=""
+        className="mt-8 aspect-16/9 w-full rounded-xl object-cover"
+      />
       <div className="mt-8 space-y-5 text-lg leading-relaxed text-ink-soft">
         {paragraphs.map((paragraph) => (
           <p key={paragraph.slice(0, 24)}>{paragraph}</p>
         ))}
       </div>
+
+      <ShareButtons
+        path={`/news/${item.slug}`}
+        title={item.title}
+        className="mt-10 border-t border-line pt-8"
+      />
+
       {item.source_url ? (
         <p className="mt-8 text-sm">
           <a href={item.source_url} target="_blank" rel="noreferrer" className="font-medium text-accent">
@@ -43,6 +67,7 @@ function NewsDetail() {
           </a>
         </p>
       ) : null}
+
       {related.length ? (
         <section className="mt-16 border-t border-line pt-10">
           <h2 className="font-display text-2xl">More news</h2>
