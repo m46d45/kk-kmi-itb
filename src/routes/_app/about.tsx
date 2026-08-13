@@ -56,7 +56,7 @@ function AboutPage() {
             </div>
           </dl>
           <p className="mt-6 text-xs leading-relaxed text-on-accent/55">
-            The FTSL page cites 12 members. This directory lists staff identified on the official group pages.
+            Directory follows the current official FTSL group page, with photos from those profiles.
           </p>
         </aside>
       </div>

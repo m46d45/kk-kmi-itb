@@ -24,11 +24,20 @@ function FacultyProfile() {
       </Link>
       <div className="mt-6 grid gap-10 lg:grid-cols-12">
         <div className="lg:col-span-8">
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-accent-2">
-            {member.role} · {member.rank}
-          </p>
-          <h1 className="mt-3 font-display text-4xl sm:text-5xl">{member.name}</h1>
-          <p className="mt-3 text-ink-soft">{member.credentials}</p>
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+            <img
+              src={member.photo}
+              alt={member.shortName}
+              className="aspect-2/3 w-36 shrink-0 rounded-xl object-cover object-top ring-1 ring-line sm:w-44"
+            />
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-accent-2">
+                {member.role} · {member.rank}
+              </p>
+              <h1 className="mt-3 font-display text-3xl sm:text-4xl">{member.name}</h1>
+              <p className="mt-3 text-ink-soft">{member.credentials}</p>
+            </div>
+          </div>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-ink-soft">{member.bio}</p>
           {member.email ? (
             <p className="mt-6 text-sm">
@@ -37,6 +46,14 @@ function FacultyProfile() {
               </a>
             </p>
           ) : null}
+          <a
+            href={member.profileUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-block text-sm font-medium text-accent"
+          >
+            Official FTSL profile
+          </a>
         </div>
         <aside className="rounded-xl border border-line bg-surface p-6 shadow-soft lg:col-span-4">
           <h2 className="font-display text-xl">Research interests</h2>

@@ -8,6 +8,8 @@ export type FacultyMember = {
   interests: string[];
   keywords: string[];
   email?: string;
+  photo: string;
+  profileUrl: string;
   bio: string;
 };
 
@@ -19,6 +21,8 @@ export const faculty: FacultyMember[] = [
     role: "Chair",
     rank: "Professor",
     credentials: "Head of the Research Group",
+    photo: "/faculty/biemo-w-soemardi.jpg",
+    profileUrl: "https://ftsl.itb.ac.id/kelompok-keahlian/manajemen-dan-rekayasa-konstruksi/bws/",
     interests: [
       "Application of Technology in Construction Project Management",
       "Visualization in Construction Project",
@@ -34,6 +38,8 @@ export const faculty: FacultyMember[] = [
     role: "Member",
     rank: "Professor",
     credentials: "Rector of ITB, 2020–2025",
+    photo: "/faculty/reini-wirahadikusumah.jpg",
+    profileUrl: "https://ftsl.itb.ac.id/kelompok-keahlian/manajemen-dan-rekayasa-konstruksi/rdw/",
     interests: [
       "Infrastructure Management",
       "Sustainable Procurement",
@@ -51,6 +57,8 @@ export const faculty: FacultyMember[] = [
     rank: "Professor",
     credentials: "Construction Operation Management",
     email: "abduh@itb.ac.id",
+    photo: "/faculty/muhamad-abduh.jpg",
+    profileUrl: "https://ftsl.itb.ac.id/kelompok-keahlian/manajemen-dan-rekayasa-konstruksi/ma/",
     interests: [
       "Productivity Improvement",
       "Lean Construction",
@@ -60,60 +68,17 @@ export const faculty: FacultyMember[] = [
     bio: "Professor of construction operations management. His research includes productivity improvement, lean construction, and product and process design in the construction industry.",
   },
   {
-    slug: "puti-farida-marzuki",
-    name: "Prof. Dr. Ir. Puti Farida Marzuki",
-    shortName: "Puti Farida Marzuki",
-    role: "Member",
-    rank: "Professor",
-    credentials: "Construction Risk Management",
-    interests: [
-      "Construction project risk management",
-      "Construction industry governance",
-      "Unknown unknowns in risk events",
-    ],
-    keywords: ["risk", "governance", "construction industry"],
-    bio: "Professor whose research addresses project risk management and construction-industry challenges, including unmapped risk events.",
-  },
-  {
-    slug: "krishna-s-pribadi",
-    name: "Prof. Ir. Krishna S. Pribadi, M.S.E., Ph.D.",
-    shortName: "Krishna S. Pribadi",
-    role: "Member",
-    rank: "Professor",
-    credentials: "Disaster Risk & Construction",
-    interests: [
-      "Disaster risk reduction in construction",
-      "Engineering services and professional practice",
-      "Construction industry policy",
-    ],
-    keywords: ["disaster", "industry policy", "engineering services"],
-    bio: "Professor focusing on disaster-risk reduction in construction, industry policy, and professional engineering practice in the ASEAN region.",
-  },
-  {
     slug: "iris-mahani",
     name: "Dr. Iris Mahani, S.T., M.T.",
     shortName: "Iris Mahani",
     role: "Member",
     rank: "Associate Professor",
     credentials: "Infrastructure Finance & Safety",
+    photo: "/faculty/iris-mahani.jpg",
+    profileUrl: "https://ftsl.itb.ac.id/kelompok-keahlian/manajemen-dan-rekayasa-konstruksi/im/",
     interests: ["Infrastructure financing", "Construction safety"],
     keywords: ["finance", "safety", "OHS"],
     bio: "Faculty member whose research interests include infrastructure financing schemes and construction safety.",
-  },
-  {
-    slug: "ima-fatima",
-    name: "Dr. Ir. Ima Fatima, M.Eng.",
-    shortName: "Ima Fatima",
-    role: "Member",
-    rank: "Associate Professor",
-    credentials: "Project Delivery & Organizations",
-    interests: [
-      "Project delivery and management process",
-      "Corporate performance management",
-      "Organizational behaviour",
-    ],
-    keywords: ["project delivery", "corporate performance", "organizations"],
-    bio: "Researches project-delivery processes, organizational performance management, and organizational behaviour among construction-industry actors.",
   },
   {
     slug: "rani-kusumawardhani",
@@ -122,11 +87,14 @@ export const faculty: FacultyMember[] = [
     role: "Member",
     rank: "Assistant Professor",
     credentials: "Construction Engineering & Management",
+    photo: "/faculty/rani-kusumawardhani.jpg",
+    profileUrl: "https://ftsl.itb.ac.id/kelompok-keahlian/manajemen-dan-rekayasa-konstruksi/rgk/",
     interests: [
       "Construction execution management",
-      "Integration of structural engineering and construction",
+      "Construction industry development and disaster mitigation",
+      "Construction material technology",
     ],
-    keywords: ["execution", "construction engineering"],
+    keywords: ["execution", "construction engineering", "materials"],
     bio: "Faculty member with a civil and structural engineering background. Education: B.Eng. Civil Engineering, ITB; M.Sc., Colorado State University; Ph.D., ITB.",
   },
   {
@@ -136,13 +104,16 @@ export const faculty: FacultyMember[] = [
     role: "Member",
     rank: "Assistant Professor",
     credentials: "Infrastructure & Community Development",
+    photo: "/faculty/eliza-rosmaya-puri.jpg",
+    profileUrl: "https://ftsl.itb.ac.id/kelompok-keahlian/manajemen-dan-rekayasa-konstruksi/erp/",
     interests: [
-      "Regional infrastructure delivery",
-      "Rural-area empowerment",
-      "Applied research collaboration",
+      "Road maintenance management",
+      "Post-disaster management",
+      "Virtual reality for construction",
+      "Project planning and control",
     ],
-    keywords: ["regional infrastructure", "rural development", "applied research"],
-    bio: "Faculty member active in applied research on infrastructure delivery and area empowerment, including the collaborative K2R initiative.",
+    keywords: ["regional infrastructure", "disaster", "planning"],
+    bio: "Faculty member active in applied research on infrastructure delivery, road maintenance, and post-disaster management.",
   },
   {
     slug: "budi-hasiholan",
@@ -152,9 +123,12 @@ export const faculty: FacultyMember[] = [
     rank: "Assistant Professor",
     credentials: "Automation & Productivity",
     email: "hasiholan.budi@itb.ac.id",
+    photo: "/faculty/budi-hasiholan.jpg",
+    profileUrl: "https://ftsl.itb.ac.id/kelompok-keahlian/manajemen-dan-rekayasa-konstruksi/bh/",
     interests: [
       "IT applications and automation in construction",
       "Productivity improvement in construction",
+      "Lean construction",
     ],
     keywords: ["automation", "construction IT", "productivity"],
     bio: "Researches information technology and automation for construction productivity improvement.",
@@ -167,6 +141,8 @@ export const faculty: FacultyMember[] = [
     rank: "Assistant Professor",
     credentials: "BIM, IPD & Quality",
     email: "meifrinaldi@itb.ac.id",
+    photo: "/faculty/meifrinaldi.jpg",
+    profileUrl: "https://ftsl.itb.ac.id/kelompok-keahlian/manajemen-dan-rekayasa-konstruksi/mei/",
     interests: [
       "Integrated Project Delivery",
       "Building Information Modelling",
@@ -176,6 +152,25 @@ export const faculty: FacultyMember[] = [
     ],
     keywords: ["BIM", "IPD", "PPP", "quality"],
     bio: "Focuses on Integrated Project Delivery, BIM, public–private partnerships, quality control, and sustainability.",
+  },
+  {
+    slug: "adrianto-oktavianus",
+    name: "Adrianto Oktavianus, S.T., M.Sc., Ph.D.",
+    shortName: "Adrianto Oktavianus",
+    role: "Member",
+    rank: "Assistant Professor",
+    credentials: "BIM & Construction Technology",
+    email: "adrianto.oktavianus@itb.ac.id",
+    photo: "/faculty/adrianto-oktavianus.jpg",
+    profileUrl: "https://ftsl.itb.ac.id/kelompok-keahlian/manajemen-dan-rekayasa-konstruksi/adrianto-oktavianus",
+    interests: [
+      "Building Information Modeling (BIM)",
+      "Construction technology application",
+      "AI and computer vision in construction",
+      "Post-disaster recovery management",
+    ],
+    keywords: ["BIM", "computer vision", "automation", "disaster recovery"],
+    bio: "Faculty member working on BIM-based analysis, automation, and AI image-based inspection. Education: S.T. Civil Engineering, ITB (2009); M.Sc. Urban Management, TU Berlin (2015); Ph.D. Civil Engineering, National Taiwan University (2024).",
   },
 ];
 
