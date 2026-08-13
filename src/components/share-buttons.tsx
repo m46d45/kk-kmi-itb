@@ -11,9 +11,11 @@ type ShareButtonsProps = {
 export function ShareButtons({ path, title, className }: ShareButtonsProps) {
   const [url, setUrl] = useState(`https://cim-itb.vercel.app${path}`);
   const [copied, setCopied] = useState(false);
+  const [canNativeShare, setCanNativeShare] = useState(false);
 
   useEffect(() => {
     setUrl(`${window.location.origin}${path}`);
+    setCanNativeShare(typeof navigator.share === "function");
   }, [path]);
 
   const encodedUrl = encodeURIComponent(url);
@@ -60,7 +62,7 @@ export function ShareButtons({ path, title, className }: ShareButtonsProps) {
   return (
     <div className={cn("flex flex-wrap items-center gap-2", className)}>
       <span className="mr-1 text-xs font-medium uppercase tracking-[0.14em] text-muted">Share</span>
-      {typeof navigator !== "undefined" && typeof navigator.share === "function" ? (
+      {canNativeShare ? (
         <button
           type="button"
           onClick={nativeShare}
