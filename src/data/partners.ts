@@ -4,7 +4,7 @@ export type Partner = {
   short: string;
   region: "national" | "international";
   href: string;
-  logo: string;
+  logo?: string;
 };
 
 export const partners: Partner[] = [
@@ -30,14 +30,13 @@ export const partners: Partner[] = [
     short: "Construction Services Development Board",
     region: "national",
     href: "https://lpjk.pu.go.id/",
-    logo: "/partners/lpjk.png",
   },
   {
     slug: "iampi",
     name: "IAMPI",
     short: "Indonesian Society of Project Management Professionals",
     region: "national",
-    href: "https://iampi.org/",
+    href: "https://iampi.id/",
     logo: "/partners/iampi.png",
   },
   {
@@ -54,7 +53,6 @@ export const partners: Partner[] = [
     short: "Indonesia–Australia Collaborative Research in Construction",
     region: "national",
     href: "",
-    logo: "/partners/ia-crc.png",
   },
   {
     slug: "loughborough",

@@ -1,14 +1,42 @@
 import { nationalPartners, internationalPartners, type Partner } from "@/data/partners";
 import { cn } from "@/lib/utils";
 
+function PartnerMark({ partner, compact = false }: { partner: Partner; compact?: boolean }) {
+  if (partner.logo) {
+    return (
+      <img
+        src={partner.logo}
+        alt=""
+        className={cn("w-auto max-w-full object-contain", compact ? "max-h-12" : "max-h-14")}
+      />
+    );
+  }
+  return (
+    <span
+      className={cn(
+        "font-display font-medium leading-tight text-accent",
+        compact ? "text-base" : "text-xl",
+      )}
+    >
+      {partner.name}
+    </span>
+  );
+}
+
 function PartnerCard({ partner }: { partner: Partner }) {
   const inner = (
     <>
       <span className="grid h-16 place-items-center">
-        <img src={partner.logo} alt="" className="max-h-14 w-auto max-w-full object-contain" />
+        <PartnerMark partner={partner} />
       </span>
-      <span className="mt-3 block text-sm font-medium leading-snug text-ink">{partner.name}</span>
-      <span className="mt-1 block text-xs leading-snug text-muted">{partner.short}</span>
+      {partner.logo ? (
+        <>
+          <span className="mt-3 block text-sm font-medium leading-snug text-ink">{partner.name}</span>
+          <span className="mt-1 block text-xs leading-snug text-muted">{partner.short}</span>
+        </>
+      ) : (
+        <span className="mt-3 block text-xs leading-snug text-muted">{partner.short}</span>
+      )}
     </>
   );
 
@@ -59,8 +87,8 @@ export function PartnerStrip() {
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {all.map((partner) => {
         const className =
-          "grid h-20 place-items-center rounded-xl border border-line bg-surface px-3 shadow-soft";
-        const img = <img src={partner.logo} alt={partner.name} className="max-h-12 w-auto max-w-full object-contain" />;
+          "grid min-h-20 place-items-center rounded-xl border border-line bg-surface px-3 py-3 text-center shadow-soft";
+        const mark = <PartnerMark partner={partner} compact />;
         if (partner.href) {
           return (
             <a
@@ -71,13 +99,13 @@ export function PartnerStrip() {
               className={cn(className, "hover:border-accent/30")}
               title={partner.name}
             >
-              {img}
+              {mark}
             </a>
           );
         }
         return (
           <div key={partner.slug} className={className} title={partner.name}>
-            {img}
+            {mark}
           </div>
         );
       })}
