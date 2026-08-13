@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { faculty, facultyStats } from "@/data/faculty";
+import { faculty } from "@/data/faculty";
 import { aboutCopy, contactInfo } from "@/data/research";
 
 export const Route = createFileRoute("/_app/about")({
@@ -40,24 +40,28 @@ function AboutPage() {
           </p>
         </article>
         <aside className="rounded-xl bg-bg-deep p-6 text-on-accent">
-          <p className="text-xs uppercase tracking-[0.16em] text-on-accent/55">Faculty composition</p>
+          <p className="text-xs uppercase tracking-[0.16em] text-on-accent/55">Faculty members and students</p>
           <dl className="mt-5 space-y-4">
             <div>
-              <dt className="text-sm text-on-accent/65">Listed members</dt>
+              <dt className="text-sm text-on-accent/65">Faculty members</dt>
               <dd className="font-display text-3xl">{faculty.length}</dd>
             </div>
             <div>
-              <dt className="text-sm text-on-accent/65">Professors</dt>
-              <dd className="font-display text-3xl">{facultyStats.professors}</dd>
+              <dt className="text-sm text-on-accent/65">Undergraduate students</dt>
+              <dd className="font-display text-3xl">25</dd>
+              <dd className="mt-1 text-xs leading-relaxed text-on-accent/55">
+                Part of the Civil Engineering programme
+              </dd>
             </div>
             <div>
-              <dt className="text-sm text-on-accent/65">Associate professors</dt>
-              <dd className="font-display text-3xl">{facultyStats.associateProfessors}</dd>
+              <dt className="text-sm text-on-accent/65">Master’s students</dt>
+              <dd className="font-display text-3xl">30</dd>
+            </div>
+            <div>
+              <dt className="text-sm text-on-accent/65">Doctoral students</dt>
+              <dd className="font-display text-3xl">8</dd>
             </div>
           </dl>
-          <p className="mt-6 text-xs leading-relaxed text-on-accent/55">
-            Directory follows the current official FTSL group page, with photos from those profiles.
-          </p>
         </aside>
       </div>
 
