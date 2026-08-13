@@ -23,7 +23,7 @@ function HomePage() {
       <section className="relative isolate overflow-hidden bg-bg-deep text-on-accent">
         <img
           src="/images/hero.jpg"
-          alt=""
+          alt="CIBE building, FTSL ITB Ganesha Campus"
           className="absolute inset-0 size-full object-cover opacity-45"
         />
         <div className="absolute inset-0 bg-linear-to-r from-bg-deep via-bg-deep/80 to-bg-deep/25" />

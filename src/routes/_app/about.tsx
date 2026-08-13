@@ -19,7 +19,7 @@ function AboutPage() {
       <p className="mt-6 max-w-3xl text-lg leading-relaxed text-ink-soft">{aboutCopy.body}</p>
 
       <div className="mt-10 overflow-hidden rounded-xl">
-        <img src="/images/hero.jpg" alt="Tropical academic campus" className="aspect-21/9 w-full object-cover" />
+        <img src="/images/cibe.jpg" alt="CIBE building, FTSL ITB Ganesha Campus" className="aspect-21/9 w-full object-cover object-[50%_35%]" />
       </div>
 
       <div className="mt-12 grid gap-6 lg:grid-cols-3">
