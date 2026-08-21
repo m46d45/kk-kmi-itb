@@ -52,7 +52,7 @@ export const partners: Partner[] = [
     name: "IA-CRC",
     short: "Indonesia–Australia Collaborative Research in Construction",
     region: "national",
-    href: "",
+    href: "https://www.ia-crc.net/",
   },
   {
     slug: "loughborough",
