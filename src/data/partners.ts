@@ -1,3 +1,5 @@
+import { iaCrcLogoSrc } from "./ia-crc-logo";
+
 export type Partner = {
   slug: string;
   name: string;
@@ -28,6 +30,7 @@ export const partners: Partner[] = [
     region: "national",
     kind: "collaboration",
     href: "https://www.ia-crc.net/",
+    logo: iaCrcLogoSrc,
     narrative:
       "A bilateral research community (est. 2023) linking Indonesian and Australian universities on construction productivity, safety, resilience, and sustainable infrastructure — through working groups, seminars, and joint research.",
   },
