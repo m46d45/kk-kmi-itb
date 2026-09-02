@@ -113,6 +113,7 @@ async function upsertCatalog() {
         excerpt = excluded.excerpt,
         body = excluded.body,
         category = excluded.category,
+        cover_url = excluded.cover_url,
         author_name = excluded.author_name,
         source_url = excluded.source_url
     `;
