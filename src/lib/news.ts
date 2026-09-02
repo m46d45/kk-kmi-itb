@@ -91,7 +91,7 @@ function catalogAsNews(): NewsItem[] {
     author_name: item.author_name,
     created_by: "system",
     source: "situs",
-    source_url: "",
+    source_url: item.source_url ?? "",
   }));
   return [...fromLinkedIn, ...fromSite].sort(
     (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime(),
@@ -106,14 +106,15 @@ async function upsertCatalog() {
       values (
         ${crypto.randomUUID()}, ${item.slug}, ${item.title}, ${item.excerpt}, ${item.body},
         ${item.category}, ${item.cover_url}, ${1}, ${item.published_at}, ${item.author_name},
-        ${"system"}, ${"situs"}, ${""}
+        ${"system"}, ${"situs"}, ${item.source_url ?? ""}
       )
       on conflict (slug) do update set
         title = excluded.title,
         excerpt = excluded.excerpt,
         body = excluded.body,
         category = excluded.category,
-        author_name = excluded.author_name
+        author_name = excluded.author_name,
+        source_url = excluded.source_url
     `;
   }
   for (const item of linkedinCatalog) {
