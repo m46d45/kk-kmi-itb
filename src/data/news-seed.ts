@@ -15,24 +15,24 @@ export const newsSeed: NewsSeed[] = [
     slug: "lean-construction-simulation-series-ice-center",
     title: "Lean construction simulation series on ICE Center ITB",
     excerpt:
-      "KK KMI is opening a six-part lean construction simulation series on ICE Center ITB — free, online labs with browser-based tools. Enrol from the instructor course list, or jump to a session below.",
+      "Six free online labs on ICE Center ITB, 19 September–19 December 2026. Enrol from the instructor course list, or open a session and its browser tool below.",
     body: `Construction work is a production system: crews, equipment, materials, and space move through cycles and hand-offs. When those cycles are unbalanced, projects finish late even though every team looks busy.
 
-The Lean Construction Simulation Series (Simulasi Konstruksi Ramping) is a short laboratory sequence from KK KMI FTSL ITB, offered through ICE Center ITB with IAMKRI — Think Lean, Act Lean! Each session is about two hours, online, and free. Participants run a browser tool, change a few parameters, and watch utilisation, queues, buffers, and waiting cost respond — rather than reading another Gantt chart.
+The Lean Construction Simulation Series (Simulasi Konstruksi Ramping) is a short laboratory sequence from KK KMI FTSL ITB, offered through ICE Center ITB with IAMKRI — Think Lean, Act Lean! Each session is two hours, online, and free. Participants run a browser tool (no install), change a few parameters, and watch utilisation, queues, buffers, and waiting cost respond — rather than reading another Gantt chart.
 
 Start from the full course list taught by Prof. Muhamad Abduh: [All ICE Center courses by Prof. Muhamad Abduh](https://icecenter.itb.ac.id/profile/abduhitb-ac-id/?view=instructor).
 
-**1. Parade of Trades.** Five sequential crews on one zone; Line of Balance, WIP, and idle cost. Course: [Seri 01 · Parade Tim Kerja](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-01-parade-tim-kerja/). Tool: [parade-tim-kerja.vercel.app](https://parade-tim-kerja.vercel.app).
+**1. Parade of Trades.** Five sequential crews on one zone; Line of Balance, WIP, idle cost, and batch hand-off. Saturday, 19 September 2026, 08.00–09.30 WIB, online via ICE Center. Course: [Seri 01 · Parade Tim Kerja](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-01-parade-tim-kerja/). Tool: [parade-tim-kerja.vercel.app](https://parade-tim-kerja.vercel.app).
 
-**2. SiklOps.** Discrete-event simulation of repeating operations — earthmoving Load–Haul–Dump–Return, brickwork, concreting, tower crane — covering throughput, match factor, buffers, cost, and emissions. Saturday, 17 October 2026, 08.00–09.30 WIB, online. Course: [Seri 02 · SiklOps](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-02-siklus-operasi/).
+**2. SiklOps.** Discrete-event simulation of repeating operations — earthmoving Load–Haul–Dump–Return, brickwork, concreting, tower crane — covering throughput, match factor, buffers, cost, and emissions. Saturday, 17 October 2026, 08.00–09.30 WIB, online via ICE Center. Course: [Seri 02 · SiklOps](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-02-siklus-operasi/). Tool: [siklops.vercel.app](https://siklops.vercel.app).
 
-**3. Neo-CYCLONE.** Halpin’s CYCLONE networks in the browser, with an AI assistant for drafting the model; the engineer still owns the logic. Saturday, 31 October 2026, 08.00–09.30 WIB, online. Course: [Seri 03 · Neo-CYCLONE](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-03-neo-cyclone/). Tool: [neo-cyclone.vercel.app](https://neo-cyclone.vercel.app).
+**3. Neo-CYCLONE.** Halpin’s CYCLONE networks in the browser, with an AI assistant for drafting the model; the engineer still owns the logic. Saturday, 31 October 2026, 08.00–09.30 WIB, online via ICE Center. Course: [Seri 03 · Neo-CYCLONE](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-03-neo-cyclone/). Tool: [neo-cyclone.vercel.app](https://neo-cyclone.vercel.app).
 
-**4. SiapKerja!** Last Planner® System for a type-36 house, from master plan to daily huddle; constraint-free work and workable backlog. Saturday, 14 November 2026, 08.00–09.30 WIB, online. Course: [Seri 04 · SiapKerja!](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-04-siapkerja/). Tool: [siapkerja-lps.vercel.app](https://siapkerja-lps.vercel.app).
+**4. SiapKerja!** Last Planner® System for a type-36 house, from master plan to daily huddle; constraint-free work and workable backlog. Saturday, 14 November 2026, 08.00–09.30 WIB, online via ICE Center. Course: [Seri 04 · SiapKerja!](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-04-siapkerja/). Tool: [siapkerja-lps.vercel.app](https://siapkerja-lps.vercel.app).
 
-**5. Rusun Takt.** Walk-up three-storey housing as a takt line; push versus JIT, seven trade wagons, one zone / one crew, including the seven-day concrete cure. Course: [Seri 05 · Rusun Takt](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-05-rusun-takt/). Tool: [rusun-takt.vercel.app](https://rusun-takt.vercel.app).
+**5. Rusun Takt.** Walk-up three-storey housing as a takt line; push versus JIT, seven trade wagons, one zone / one crew, including the seven-day concrete cure. Saturday, 5 December 2026, 08.00–09.30 WIB, online via ICE Center. Course: [Seri 05 · Rusun Takt](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-05-rusun-takt/). Tool: [rusun-takt.vercel.app](https://rusun-takt.vercel.app).
 
-**6. MP2K.** Project production management across three modes — in-situ columns, near-site beams, far-supply slabs — using capacity, variability, and inventory; Little’s Law, Kingman, CONWIP. Course: [Seri 06 · MP2K](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-06-mp2k/).
+**6. MP2K.** Project production management across three modes — in-situ columns, near-site beams, far-supply slabs — using capacity, variability, and inventory; Little’s Law, Kingman, CONWIP. Saturday, 19 December 2026, 08.00–09.30 WIB, online via ICE Center. Course: [Seri 06 · MP2K](https://icecenter.itb.ac.id/courses/simulasi-konstruksi-ramping-seri-06-mp2k/). Tool: [mp2k.vercel.app](https://mp2k.vercel.app).
 
 Introductory ICE Center sessions on lean construction, construction operations, and operations simulation remain on the same instructor page if you want the conceptual prelude before the labs.
 
