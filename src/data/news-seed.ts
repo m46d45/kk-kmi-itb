@@ -38,7 +38,7 @@ Introductory ICE Center sessions on lean construction, construction operations, 
 
 The series is built for contractors, consultants, owners, lecturers, and students who need to see flow — not only schedule percent-complete.`,
     category: "Training",
-    cover_url: "/images/lab.jpg",
+    cover_url: "/images/ice-series.svg",
     published_at: "2026-09-02T08:00:00.000Z",
     author_name: "KK KMI Communications",
     source_url: "https://icecenter.itb.ac.id/profile/abduhitb-ac-id/?view=instructor",
