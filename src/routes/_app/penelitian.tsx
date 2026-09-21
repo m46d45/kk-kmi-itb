@@ -1,7 +1,9 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { ResearchView } from "@/components/research-view";
 
 export const Route = createFileRoute("/_app/penelitian")({
-  beforeLoad: () => {
-    throw redirect({ to: "/research" });
-  },
+  component: () => <ResearchView locale="id" />,
+  head: () => ({
+    meta: [{ title: "Penelitian · KK KMI FTSL ITB" }],
+  }),
 });

@@ -13,9 +13,12 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as EmbedRouteImport } from './routes/embed'
 import { Route as EmbedDotjsRouteImport } from './routes/embed[.]js'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppAboutRouteImport } from './routes/_app/about'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
+import { Route as AppBerandaRouteImport } from './routes/_app/beranda'
 import { Route as AppPenelitianRouteImport } from './routes/_app/penelitian'
 import { Route as AppResearchRouteImport } from './routes/_app/research'
 import { Route as AppTentangRouteImport } from './routes/_app/tentang'
@@ -50,6 +53,16 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -63,6 +76,11 @@ const AppAboutRoute = AppAboutRouteImport.update({
 const AppAdminRoute = AppAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBerandaRoute = AppBerandaRouteImport.update({
+  id: '/beranda',
+  path: '/beranda',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPenelitianRoute = AppPenelitianRouteImport.update({
@@ -141,8 +159,11 @@ export interface FileRoutesByFullPath {
   '/embed': typeof EmbedRoute
   '/embed.js': typeof EmbedDotjsRoute
   '/login': typeof LoginRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/about': typeof AppAboutRoute
   '/admin': typeof AppAdminRoute
+  '/beranda': typeof AppBerandaRoute
   '/penelitian': typeof AppPenelitianRoute
   '/research': typeof AppResearchRoute
   '/tentang': typeof AppTentangRoute
@@ -162,8 +183,11 @@ export interface FileRoutesByTo {
   '/embed': typeof EmbedRoute
   '/embed.js': typeof EmbedDotjsRoute
   '/login': typeof LoginRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/about': typeof AppAboutRoute
   '/admin': typeof AppAdminRoute
+  '/beranda': typeof AppBerandaRoute
   '/penelitian': typeof AppPenelitianRoute
   '/research': typeof AppResearchRoute
   '/tentang': typeof AppTentangRoute
@@ -186,8 +210,11 @@ export interface FileRoutesById {
   '/embed': typeof EmbedRoute
   '/embed.js': typeof EmbedDotjsRoute
   '/login': typeof LoginRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_app/about': typeof AppAboutRoute
   '/_app/admin': typeof AppAdminRoute
+  '/_app/beranda': typeof AppBerandaRoute
   '/_app/penelitian': typeof AppPenelitianRoute
   '/_app/research': typeof AppResearchRoute
   '/_app/tentang': typeof AppTentangRoute
@@ -211,8 +238,11 @@ export interface FileRouteTypes {
     | '/embed'
     | '/embed.js'
     | '/login'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/about'
     | '/admin'
+    | '/beranda'
     | '/penelitian'
     | '/research'
     | '/tentang'
@@ -232,8 +262,11 @@ export interface FileRouteTypes {
     | '/embed'
     | '/embed.js'
     | '/login'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/about'
     | '/admin'
+    | '/beranda'
     | '/penelitian'
     | '/research'
     | '/tentang'
@@ -255,8 +288,11 @@ export interface FileRouteTypes {
     | '/embed'
     | '/embed.js'
     | '/login'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/_app/about'
     | '/_app/admin'
+    | '/_app/beranda'
     | '/_app/penelitian'
     | '/_app/research'
     | '/_app/tentang'
@@ -279,6 +315,8 @@ export interface RootRouteChildren {
   EmbedRoute: typeof EmbedRoute
   EmbedDotjsRoute: typeof EmbedDotjsRoute
   LoginRoute: typeof LoginRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiNewsRoute: typeof ApiNewsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -313,6 +351,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/': {
       id: '/_app/'
       path: '/'
@@ -332,6 +384,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/beranda': {
+      id: '/_app/beranda'
+      path: '/beranda'
+      fullPath: '/beranda'
+      preLoaderRoute: typeof AppBerandaRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/penelitian': {
@@ -438,6 +497,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
   AppAdminRoute: typeof AppAdminRoute
+  AppBerandaRoute: typeof AppBerandaRoute
   AppPenelitianRoute: typeof AppPenelitianRoute
   AppResearchRoute: typeof AppResearchRoute
   AppTentangRoute: typeof AppTentangRoute
@@ -456,6 +516,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAboutRoute: AppAboutRoute,
   AppAdminRoute: AppAdminRoute,
+  AppBerandaRoute: AppBerandaRoute,
   AppPenelitianRoute: AppPenelitianRoute,
   AppResearchRoute: AppResearchRoute,
   AppTentangRoute: AppTentangRoute,
@@ -478,6 +539,8 @@ const rootRouteChildren: RootRouteChildren = {
   EmbedRoute: EmbedRoute,
   EmbedDotjsRoute: EmbedDotjsRoute,
   LoginRoute: LoginRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiNewsRoute: ApiNewsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

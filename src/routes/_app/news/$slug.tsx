@@ -1,7 +1,5 @@
-import { Link, createFileRoute, notFound } from "@tanstack/react-router";
-import { formatNewsDate } from "@/components/news-card";
-import { NewsBody } from "@/components/news-body";
-import { ShareButtons } from "@/components/share-buttons";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { NewsDetailView } from "@/components/news-detail-view";
 import { getNewsBySlug, listPublishedNews } from "@/lib/news";
 
 export const Route = createFileRoute("/_app/news/$slug")({
@@ -15,79 +13,16 @@ export const Route = createFileRoute("/_app/news/$slug")({
   },
   component: NewsDetail,
   head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.item.title ?? "News"} · KK KMI` }],
+    meta: [
+      { title: `${loaderData?.item.title ?? "News"} · KK KMI` },
+      ...(loaderData?.item.excerpt
+        ? [{ name: "description", content: loaderData.item.excerpt }]
+        : []),
+    ],
   }),
 });
 
-function sourceLabel(item: { source: string; source_url: string }) {
-  if (!item.source_url) return null;
-  if (item.source === "linkedin" || item.source_url.includes("linkedin.com")) {
-    return "Open the original LinkedIn post";
-  }
-  if (item.source_url.includes("icecenter.itb.ac.id")) {
-    return "Open the ICE Center course list";
-  }
-  return "Open the source page";
-}
-
 function NewsDetail() {
   const { item, related } = Route.useLoaderData();
-  const sourceText = sourceLabel(item);
-
-  return (
-    <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <Link to="/news" className="text-sm text-accent">
-        All news
-      </Link>
-      <p className="mt-6 text-xs font-medium uppercase tracking-[0.16em] text-accent-2">
-        {item.source === "linkedin" ? "LinkedIn · " : ""}
-        {item.category} · {formatNewsDate(item.published_at)}
-      </p>
-      <h1 className="mt-3 font-display text-4xl sm:text-5xl">{item.title}</h1>
-      <p className="mt-4 text-ink-soft">{item.author_name}</p>
-
-      <ShareButtons
-        path={`/news/${item.slug}`}
-        title={item.title}
-        className="mt-6"
-      />
-
-      <img
-        src={item.cover_url}
-        alt=""
-        className="mt-8 aspect-16/9 w-full rounded-xl object-cover"
-      />
-      <NewsBody body={item.body} />
-
-      <ShareButtons
-        path={`/news/${item.slug}`}
-        title={item.title}
-        className="mt-10 border-t border-line pt-8"
-      />
-
-      {sourceText ? (
-        <p className="mt-8 text-sm">
-          <a href={item.source_url} target="_blank" rel="noreferrer" className="font-medium text-accent">
-            {sourceText}
-          </a>
-        </p>
-      ) : null}
-
-      {related.length ? (
-        <section className="mt-16 border-t border-line pt-10">
-          <h2 className="font-display text-2xl">More news</h2>
-          <ul className="mt-5 space-y-4">
-            {related.map((entry) => (
-              <li key={entry.id}>
-                <Link to="/news/$slug" params={{ slug: entry.slug }} className="hover:text-accent">
-                  <span className="block text-sm text-muted">{formatNewsDate(entry.published_at)}</span>
-                  <span className="font-display text-xl">{entry.title}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-    </main>
-  );
+  return <NewsDetailView item={item} related={related} locale="en" />;
 }

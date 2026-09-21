@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { ContentPipeline } from "@/components/content-pipeline";
 import { formatNewsDate } from "@/components/news-card";
+import { isEditorEmail } from "@/lib/auth/editors";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { deleteNews, listAllNews, saveNews, syncLinkedInCatalog, type NewsItem } from "@/lib/news";
@@ -9,7 +10,7 @@ import { deleteNews, listAllNews, saveNews, syncLinkedInCatalog, type NewsItem }
 export const Route = createFileRoute("/_app/admin")({
   component: AdminPage,
   head: () => ({
-    meta: [{ title: "News desk · KK KMI" }],
+    meta: [{ title: "News desk · KK KMI" }, { name: "robots", content: "noindex" }],
   }),
 });
 
@@ -33,6 +34,7 @@ const covers = [
   "/images/lego.jpg",
   "/images/cranes.jpg",
   "/images/site-plan.jpg",
+  "/images/ice-series.svg",
 ];
 
 function deriveFromPaste(raw: string) {
@@ -50,8 +52,11 @@ function AdminPage() {
   const { user, isPending } = useCurrentUserState();
   const [items, setItems] = useState<NewsItem[]>([]);
   const [form, setForm] = useState(emptyForm);
+  const [customCover, setCustomCover] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const canEdit = Boolean(user && (user.isDevFallback || isEditorEmail(user.primaryEmail)));
 
   async function refresh() {
     const rows = await listAllNews();
@@ -60,36 +65,57 @@ function AdminPage() {
   }
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !canEdit) return;
     void refresh().catch(() => setLoading(false));
-  }, [user]);
+  }, [user, canEdit]);
 
   if (isPending) {
     return <div className="mx-auto max-w-6xl px-4 py-16 text-ink-soft">Loading session…</div>;
   }
   if (!user) return <RedirectToSignIn />;
+  if (!canEdit) {
+    return (
+      <main className="mx-auto max-w-xl px-4 py-20 text-center">
+        <h1 className="font-display text-3xl">Editors only</h1>
+        <p className="mt-4 text-ink-soft">
+          This news desk is limited to ITB editor accounts. Sign in with an{" "}
+          <span className="font-medium">@itb.ac.id</span> email, or ask an admin to add your address to{" "}
+          <code className="text-sm">EDITOR_EMAILS</code>.
+        </p>
+        <Link to="/" className="mt-8 inline-block text-sm font-medium text-accent">
+          Back to home
+        </Link>
+      </main>
+    );
+  }
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setStatus(null);
     const derived = !form.title || !form.excerpt ? deriveFromPaste(form.body) : null;
-    await saveNews({
-      data: {
-        id: form.id || undefined,
-        title: form.title || derived?.title || "KK KMI LinkedIn post",
-        excerpt: form.excerpt || derived?.excerpt || form.body.slice(0, 220),
-        body: form.body || derived?.body || form.title,
-        category: form.category,
-        cover_url: form.cover_url,
-        published: form.published,
-        author_name: form.author_name,
-        source_url: form.source_url,
-        source: form.source_url.includes("linkedin.com") ? "linkedin" : "situs",
-      },
-    });
-    setForm(emptyForm);
-    setStatus("Published on this site. The FTSL embed will show the same item.");
-    await refresh();
+    const cover = customCover.trim() || form.cover_url;
+    try {
+      await saveNews({
+        data: {
+          id: form.id || undefined,
+          title: form.title || derived?.title || "KK KMI LinkedIn post",
+          excerpt: form.excerpt || derived?.excerpt || form.body.slice(0, 220),
+          body: form.body || derived?.body || form.title,
+          category: form.category,
+          cover_url: cover,
+          published: form.published,
+          author_name: form.author_name,
+          source_url: form.source_url,
+          source: form.source_url.includes("linkedin.com") ? "linkedin" : "situs",
+        },
+      });
+      setForm(emptyForm);
+      setCustomCover("");
+      setStatus("Published on this site. The FTSL embed will show the same item.");
+      await refresh();
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : "Could not save.");
+    }
   }
 
   return (
@@ -113,9 +139,7 @@ function AdminPage() {
           className="text-sm text-accent"
           onClick={async () => {
             const result = await syncLinkedInCatalog();
-            setStatus(
-              `LinkedIn catalogue synced. ${result.inserted} new, ${result.upserted} updated — ready for FTSL.`,
-            );
+            setStatus(`Catalogue synced (${result.upserted} items). Ready for FTSL.`);
             await refresh();
           }}
         >
@@ -193,10 +217,13 @@ function AdminPage() {
               />
             </Field>
           </div>
-          <Field label="Cover image">
+          <Field label="Cover image (preset)">
             <select
-              value={form.cover_url}
-              onChange={(e) => setForm({ ...form, cover_url: e.target.value })}
+              value={covers.includes(form.cover_url) ? form.cover_url : covers[0]}
+              onChange={(e) => {
+                setCustomCover("");
+                setForm({ ...form, cover_url: e.target.value });
+              }}
               className="h-11 w-full rounded-md border border-line bg-bg px-3"
             >
               {covers.map((src) => (
@@ -205,6 +232,15 @@ function AdminPage() {
                 </option>
               ))}
             </select>
+          </Field>
+          <Field label="Or cover URL (https://… or /images/…)">
+            <input
+              type="text"
+              value={customCover}
+              placeholder="https://… or /images/…"
+              onChange={(e) => setCustomCover(e.target.value)}
+              className="h-11 w-full rounded-md border border-line bg-bg px-3"
+            />
           </Field>
           <label className="flex items-center gap-2 text-sm">
             <input
@@ -244,19 +280,20 @@ function AdminPage() {
                     <button
                       type="button"
                       className="text-accent"
-                      onClick={() =>
+                      onClick={() => {
+                        setCustomCover(covers.includes(item.cover_url) ? "" : item.cover_url);
                         setForm({
                           id: item.id,
                           title: item.title,
                           excerpt: item.excerpt,
                           body: item.body,
                           category: item.category,
-                          cover_url: item.cover_url,
+                          cover_url: covers.includes(item.cover_url) ? item.cover_url : covers[0]!,
                           author_name: item.author_name,
                           published: item.published,
                           source_url: item.source_url,
-                        })
-                      }
+                        });
+                      }}
                     >
                       Edit
                     </button>
