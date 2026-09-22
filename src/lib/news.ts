@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { linkedinCatalog } from "@/data/linkedin";
 import { newsSeed } from "@/data/news-seed";
+import { editorMiddleware } from "@/lib/auth/editor-middleware";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
 import { slugify } from "@/lib/utils";
@@ -98,44 +99,58 @@ function catalogAsNews(): NewsItem[] {
   );
 }
 
-async function upsertCatalog() {
-  const sql = await getSql();
-  for (const item of newsSeed) {
-    await sql`
-      insert into news (id, slug, title, excerpt, body, category, cover_url, published, published_at, author_name, created_by, source, source_url)
-      values (
-        ${crypto.randomUUID()}, ${item.slug}, ${item.title}, ${item.excerpt}, ${item.body},
-        ${item.category}, ${item.cover_url}, ${1}, ${item.published_at}, ${item.author_name},
-        ${"system"}, ${"situs"}, ${item.source_url ?? ""}
-      )
-      on conflict (slug) do update set
-        title = excluded.title,
-        excerpt = excluded.excerpt,
-        body = excluded.body,
-        category = excluded.category,
-        cover_url = excluded.cover_url,
-        author_name = excluded.author_name,
-        source_url = excluded.source_url
-    `;
+const globalSeed = globalThis as typeof globalThis & {
+  __newsCatalogSeedPromise__?: Promise<void>;
+};
+
+/** Upsert seed + LinkedIn catalogue once per process (not on every public read). */
+export async function ensureNewsCatalogSeeded(): Promise<void> {
+  if (!globalSeed.__newsCatalogSeedPromise__) {
+    globalSeed.__newsCatalogSeedPromise__ = (async () => {
+      const sql = await getSql();
+      for (const item of newsSeed) {
+        await sql`
+          insert into news (id, slug, title, excerpt, body, category, cover_url, published, published_at, author_name, created_by, source, source_url)
+          values (
+            ${crypto.randomUUID()}, ${item.slug}, ${item.title}, ${item.excerpt}, ${item.body},
+            ${item.category}, ${item.cover_url}, ${1}, ${item.published_at}, ${item.author_name},
+            ${"system"}, ${"situs"}, ${item.source_url ?? ""}
+          )
+          on conflict (slug) do update set
+            title = excluded.title,
+            excerpt = excluded.excerpt,
+            body = excluded.body,
+            category = excluded.category,
+            cover_url = excluded.cover_url,
+            author_name = excluded.author_name,
+            source_url = excluded.source_url
+        `;
+      }
+      for (const item of linkedinCatalog) {
+        await sql`
+          insert into news (id, slug, title, excerpt, body, category, cover_url, published, published_at, author_name, created_by, source, source_url)
+          values (
+            ${crypto.randomUUID()}, ${item.slug}, ${item.title}, ${item.excerpt}, ${item.body},
+            ${item.category}, ${item.cover_url}, ${1}, ${item.published_at}, ${item.author_name},
+            ${"linkedin"}, ${"linkedin"}, ${item.source_url}
+          )
+          on conflict (slug) do update set
+            title = excluded.title,
+            excerpt = excluded.excerpt,
+            body = excluded.body,
+            category = excluded.category,
+            cover_url = excluded.cover_url,
+            source = excluded.source,
+            source_url = excluded.source_url,
+            author_name = excluded.author_name
+        `;
+      }
+    })().catch((err) => {
+      globalSeed.__newsCatalogSeedPromise__ = undefined;
+      throw err;
+    });
   }
-  for (const item of linkedinCatalog) {
-    await sql`
-      insert into news (id, slug, title, excerpt, body, category, cover_url, published, published_at, author_name, created_by, source, source_url)
-      values (
-        ${crypto.randomUUID()}, ${item.slug}, ${item.title}, ${item.excerpt}, ${item.body},
-        ${item.category}, ${item.cover_url}, ${1}, ${item.published_at}, ${item.author_name},
-        ${"linkedin"}, ${"linkedin"}, ${item.source_url}
-      )
-      on conflict (slug) do update set
-        title = excluded.title,
-        excerpt = excluded.excerpt,
-        body = excluded.body,
-        category = excluded.category,
-        source = excluded.source,
-        source_url = excluded.source_url,
-        author_name = excluded.author_name
-    `;
-  }
+  await globalSeed.__newsCatalogSeedPromise__;
 }
 
 export const listPublishedNews = createServerFn({ method: "GET" })
@@ -144,7 +159,7 @@ export const listPublishedNews = createServerFn({ method: "GET" })
   }))
   .handler(async ({ data }) => {
     try {
-      await upsertCatalog();
+      await ensureNewsCatalogSeeded();
       const sql = await getSql();
       const rows = await sql<NewsRow>`
         select id, slug, title, excerpt, body, category, cover_url, published, published_at, author_name, created_by, source, source_url
@@ -164,7 +179,7 @@ export const getNewsBySlug = createServerFn({ method: "GET" })
   .validator((slug: string) => slug)
   .handler(async ({ data: slug }) => {
     try {
-      await upsertCatalog();
+      await ensureNewsCatalogSeeded();
       const sql = await getSql();
       const rows = await sql<NewsRow>`
         select id, slug, title, excerpt, body, category, cover_url, published, published_at, author_name, created_by, source, source_url
@@ -182,7 +197,7 @@ export const getNewsBySlug = createServerFn({ method: "GET" })
 export const listAllNews = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async () => {
-    await upsertCatalog();
+    await ensureNewsCatalogSeeded();
     const sql = await getSql();
     const rows = await sql<NewsRow>`
       select id, slug, title, excerpt, body, category, cover_url, published, published_at, author_name, created_by, source, source_url
@@ -192,13 +207,24 @@ export const listAllNews = createServerFn({ method: "GET" })
     return rows.map(mapNews);
   });
 
+const coverUrlSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (value) =>
+      value.startsWith("/images/") ||
+      value.startsWith("/faculty/") ||
+      /^https:\/\//i.test(value),
+    { message: "Cover must be a site path under /images/ or an https URL" },
+  );
+
 const newsInput = z.object({
   id: z.string().optional(),
   title: z.string().min(8),
   excerpt: z.string().min(16),
   body: z.string().min(32),
   category: z.string().min(2),
-  cover_url: z.string().min(1),
+  cover_url: coverUrlSchema,
   published: z.boolean(),
   author_name: z.string().min(2),
   source_url: z.string().optional(),
@@ -206,18 +232,19 @@ const newsInput = z.object({
 });
 
 export const saveNews = createServerFn({ method: "POST" })
-  .middleware([authMiddleware])
+  .middleware([editorMiddleware])
   .validator((input: unknown) => newsInput.parse(input))
   .handler(async ({ context, data }) => {
     const sql = await getSql();
-    const slug = slugify(data.title);
     const sourceUrl = data.source_url?.trim() ?? "";
     const source = data.source?.trim() || (sourceUrl.includes("linkedin.com") ? "linkedin" : "situs");
     if (data.id) {
+      // Keep the existing slug so public URLs and the FTSL embed stay stable.
+      const existing = await sql<{ slug: string }>`select slug from news where id = ${data.id} limit 1`;
+      const slug = existing[0]?.slug ?? slugify(data.title);
       await sql`
         update news
         set title = ${data.title},
-            slug = ${slug},
             excerpt = ${data.excerpt},
             body = ${data.body},
             category = ${data.category},
@@ -232,6 +259,11 @@ export const saveNews = createServerFn({ method: "POST" })
       return { id: data.id, slug };
     }
     const id = crypto.randomUUID();
+    let slug = slugify(data.title);
+    const clash = await sql<{ n: number }>`select count(*)::int as n from news where slug = ${slug}`;
+    if ((clash[0]?.n ?? 0) > 0) {
+      slug = `${slug}-${id.slice(0, 8)}`;
+    }
     await sql`
       insert into news (id, slug, title, excerpt, body, category, cover_url, published, published_at, author_name, created_by, source, source_url)
       values (
@@ -244,7 +276,7 @@ export const saveNews = createServerFn({ method: "POST" })
   });
 
 export const deleteNews = createServerFn({ method: "POST" })
-  .middleware([authMiddleware])
+  .middleware([editorMiddleware])
   .validator((id: string) => id)
   .handler(async ({ data: id }) => {
     const sql = await getSql();
@@ -253,31 +285,13 @@ export const deleteNews = createServerFn({ method: "POST" })
   });
 
 export const syncLinkedInCatalog = createServerFn({ method: "POST" })
-  .middleware([authMiddleware])
+  .middleware([editorMiddleware])
   .handler(async () => {
-    const sql = await getSql();
-    let inserted = 0;
-    for (const item of linkedinCatalog) {
-      const before = await sql<{ n: number }>`select count(*)::int as n from news where slug = ${item.slug}`;
-      await sql`
-        insert into news (id, slug, title, excerpt, body, category, cover_url, published, published_at, author_name, created_by, source, source_url)
-        values (
-          ${crypto.randomUUID()}, ${item.slug}, ${item.title}, ${item.excerpt}, ${item.body},
-          ${item.category}, ${item.cover_url}, ${1}, ${item.published_at}, ${item.author_name},
-          ${"linkedin"}, ${"linkedin"}, ${item.source_url}
-        )
-        on conflict (slug) do update set
-          title = excluded.title,
-          excerpt = excluded.excerpt,
-          body = excluded.body,
-          category = excluded.category,
-          cover_url = excluded.cover_url,
-          source = excluded.source,
-          source_url = excluded.source_url,
-          author_name = excluded.author_name,
-          updated_at = now()
-      `;
-      if ((before[0]?.n ?? 0) === 0) inserted += 1;
-    }
-    return { upserted: linkedinCatalog.length, inserted };
+    // Force a fresh upsert even if the process already seeded once.
+    globalSeed.__newsCatalogSeedPromise__ = undefined;
+    await ensureNewsCatalogSeeded();
+    return { upserted: linkedinCatalog.length + newsSeed.length, inserted: 0 };
   });
+
+/** Pure helpers exported for unit tests / debugging. */
+export const newsInternals = { mapNews, catalogAsNews, toIso };

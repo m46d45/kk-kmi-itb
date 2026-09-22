@@ -1,12 +1,39 @@
-import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Outlet, Scripts, useRouterState } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { AppErrorComponent } from "@/lib/error-component";
+import { localeFromPathname, ui } from "@/lib/i18n";
+import { contactInfo } from "@/data/research";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "KK KMI FTSL ITB";
 const host = import.meta.env.VITE_PUBLIC_HOSTNAME;
 const ogImage = host ? `https://${host}/og.jpg` : undefined;
+
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ResearchOrganization",
+  name: "Construction and Infrastructure Management Research Group",
+  alternateName: ["KK KMI", "Kelompok Keahlian Konstruksi dan Manajemen Infrastruktur"],
+  url: host ? `https://${host}/` : undefined,
+  parentOrganization: {
+    "@type": "CollegeOrUniversity",
+    name: "Institut Teknologi Bandung",
+    url: "https://www.itb.ac.id",
+  },
+  department: contactInfo.faculty,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Jl. Ganesa No. 10",
+    addressLocality: "Bandung",
+    postalCode: "40132",
+    addressRegion: "West Java",
+    addressCountry: "ID",
+  },
+  email: contactInfo.email,
+  telephone: contactInfo.phone,
+  sameAs: [contactInfo.linkedin, contactInfo.officialPage],
+};
 
 export const Route = createRootRoute({
   head: () => ({
@@ -51,12 +78,20 @@ export const Route = createRootRoute({
 });
 
 function RootDocument() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const lang = localeFromPathname(pathname);
+
   return (
-    <html lang="en" className="antialiased" suppressHydrationWarning>
+    <html lang={lang} className="antialiased" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
+        <script
+          type="application/ld+json"
+          // Organization schema for search engines
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
         <PreviewHostBridge />
         <AuthProvider>
           <Outlet />
@@ -68,14 +103,16 @@ function RootDocument() {
 }
 
 function NotFoundPage() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const t = ui[localeFromPathname(pathname)];
   return (
     <main className="grid min-h-svh place-items-center bg-bg px-6 text-center text-ink">
       <div>
         <p className="text-xs uppercase tracking-[0.16em] text-muted">404</p>
-        <h1 className="mt-3 font-display text-4xl">Page not found</h1>
-        <p className="mt-3 text-ink-soft">The link may have moved.</p>
+        <h1 className="mt-3 font-display text-4xl">{t.notFoundTitle}</h1>
+        <p className="mt-3 text-ink-soft">{t.notFoundBody}</p>
         <a href="/" className="mt-6 inline-block text-sm font-medium text-accent">
-          Back to home
+          {t.backHome}
         </a>
       </div>
     </main>

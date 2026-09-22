@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { NewsCard } from "@/components/news-card";
 import { listPublishedNews } from "@/lib/news";
+import { resolveEmbedPostTarget } from "@/lib/embed-origin";
 
 export const Route = createFileRoute("/embed")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -23,7 +24,10 @@ function EmbedWidget() {
     setOrigin(window.location.origin);
     const send = () => {
       const height = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
-      window.parent?.postMessage({ type: "kmi-embed-height", height }, "*");
+      const target = resolveEmbedPostTarget(document.referrer ? new URL(document.referrer).origin : null);
+      // Prefer documented parent origin from referrer; fall back to same-origin only.
+      const dest = target ?? window.location.origin;
+      window.parent?.postMessage({ type: "kmi-embed-height", height }, dest);
     };
     send();
     const observer = new ResizeObserver(send);

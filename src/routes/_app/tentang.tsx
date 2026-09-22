@@ -1,7 +1,9 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { AboutView } from "@/components/about-view";
 
 export const Route = createFileRoute("/_app/tentang")({
-  beforeLoad: () => {
-    throw redirect({ to: "/about" });
-  },
+  component: () => <AboutView locale="id" />,
+  head: () => ({
+    meta: [{ title: "Tentang · KK KMI FTSL ITB" }],
+  }),
 });

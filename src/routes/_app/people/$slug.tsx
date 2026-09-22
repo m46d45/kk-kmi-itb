@@ -1,26 +1,17 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { faculty, getFaculty } from "@/data/faculty";
+import type { Locale } from "@/lib/i18n";
 
-export const Route = createFileRoute("/_app/people/$slug")({
-  loader: ({ params }) => {
-    const member = getFaculty(params.slug);
-    if (!member) throw notFound();
-    return member;
-  },
-  component: FacultyProfile,
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.shortName ?? "Faculty"} · KK KMI` }],
-  }),
-});
-
-function FacultyProfile() {
+function FacultyProfileView({ locale }: { locale: Locale }) {
   const member = Route.useLoaderData();
   const others = faculty.filter((item) => item.slug !== member.slug).slice(0, 3);
+  const listTo = locale === "id" ? "/anggota" : "/people";
+  const detailTo = locale === "id" ? "/anggota/$slug" : "/people/$slug";
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <Link to="/people" className="text-sm text-accent">
-        Back to directory
+      <Link to={listTo} className="text-sm text-accent">
+        {locale === "id" ? "Kembali ke direktori" : "Back to directory"}
       </Link>
       <div className="mt-6 grid gap-10 lg:grid-cols-12">
         <div className="lg:col-span-8">
@@ -32,7 +23,9 @@ function FacultyProfile() {
             />
             <div>
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-accent-2">
-                {member.role} · {member.rank}
+                {locale === "id"
+                  ? `${member.role === "Chair" ? "Ketua" : "Anggota"} · ${member.rank}`
+                  : `${member.role} · ${member.rank}`}
               </p>
               <h1 className="mt-3 font-display text-3xl sm:text-4xl">{member.name}</h1>
               <p className="mt-3 text-ink-soft">{member.credentials}</p>
@@ -52,11 +45,13 @@ function FacultyProfile() {
             rel="noreferrer"
             className="mt-4 inline-block text-sm font-medium text-accent"
           >
-            Official FTSL profile
+            {locale === "id" ? "Profil resmi FTSL" : "Official FTSL profile"}
           </a>
         </div>
         <aside className="rounded-xl border border-line bg-surface p-6 shadow-soft lg:col-span-4">
-          <h2 className="font-display text-xl">Research interests</h2>
+          <h2 className="font-display text-xl">
+            {locale === "id" ? "Minat penelitian" : "Research interests"}
+          </h2>
           <ul className="mt-4 space-y-3 text-sm leading-relaxed text-ink-soft">
             {member.interests.map((item) => (
               <li key={item} className="border-b border-line pb-3 last:border-0 last:pb-0">
@@ -64,7 +59,9 @@ function FacultyProfile() {
               </li>
             ))}
           </ul>
-          <p className="mt-6 text-xs uppercase tracking-[0.14em] text-muted">Keywords</p>
+          <p className="mt-6 text-xs uppercase tracking-[0.14em] text-muted">
+            {locale === "id" ? "Kata kunci" : "Keywords"}
+          </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {member.keywords.map((keyword) => (
               <span key={keyword} className="rounded-full bg-surface-2 px-3 py-1 text-xs text-ink-soft">
@@ -75,12 +72,12 @@ function FacultyProfile() {
         </aside>
       </div>
       <section className="mt-16">
-        <h2 className="font-display text-2xl">Other faculty</h2>
+        <h2 className="font-display text-2xl">{locale === "id" ? "Dosen lain" : "Other faculty"}</h2>
         <div className="mt-5 flex flex-col gap-2">
           {others.map((item) => (
             <Link
               key={item.slug}
-              to="/people/$slug"
+              to={detailTo}
               params={{ slug: item.slug }}
               className="rounded-md border border-line bg-surface px-4 py-3 hover:border-accent/30"
             >
@@ -93,3 +90,15 @@ function FacultyProfile() {
     </main>
   );
 }
+
+export const Route = createFileRoute("/_app/people/$slug")({
+  loader: ({ params }) => {
+    const member = getFaculty(params.slug);
+    if (!member) throw notFound();
+    return member;
+  },
+  component: () => <FacultyProfileView locale="en" />,
+  head: ({ loaderData }) => ({
+    meta: [{ title: `${loaderData?.shortName ?? "Faculty"} · KK KMI` }],
+  }),
+});

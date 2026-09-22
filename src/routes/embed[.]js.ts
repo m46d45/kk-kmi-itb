@@ -16,6 +16,7 @@ const script = `(() => {
   iframe.style.minHeight = "640px";
   iframe.loading = "lazy";
   window.addEventListener("message", (event) => {
+    if (event.origin !== origin) return;
     if (!event.data || event.data.type !== "kmi-embed-height") return;
     if (typeof event.data.height === "number") {
       iframe.style.height = event.data.height + "px";

@@ -3,22 +3,32 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { UserButton } from "@/lib/auth/gates";
+import { isEditorEmail } from "@/lib/auth/editors";
 import { contactInfo } from "@/data/research";
+import { localeFromPathname, localePaths, switchLocalePath, ui, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-const nav = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/research", label: "Research" },
-  { to: "/people", label: "Faculty" },
-  { to: "/news", label: "News" },
-  { to: "/widget", label: "Embed" },
-] as const;
+function navFor(locale: Locale) {
+  const t = ui[locale];
+  return [
+    { to: localePaths.home[locale], label: t.navHome },
+    { to: localePaths.about[locale], label: t.navAbout },
+    { to: localePaths.research[locale], label: t.navResearch },
+    { to: localePaths.people[locale], label: t.navPeople },
+    { to: localePaths.news[locale], label: t.navNews },
+  ] as const;
+}
 
 export function SiteHeader() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const locale = localeFromPathname(pathname);
+  const t = ui[locale];
+  const nav = navFor(locale);
   const { user, isPending } = useCurrentUserState();
   const [open, setOpen] = useState(false);
+  const otherLocale: Locale = locale === "en" ? "id" : "en";
+  const langHref = switchLocalePath(pathname, otherLocale);
+  const showDesk = Boolean(user && (user.isDevFallback || isEditorEmail(user.primaryEmail)));
 
   return (
     <header className="sticky top-0 z-40 border-b-2 border-accent-2 bg-bg-deep text-on-accent">
@@ -34,7 +44,9 @@ export function SiteHeader() {
               KK KMI
             </span>
             <span className="block truncate font-display text-base leading-tight text-on-accent sm:text-lg">
-              Construction & Infrastructure Management
+              {locale === "id"
+                ? "Konstruksi & Manajemen Infrastruktur"
+                : "Construction & Infrastructure Management"}
             </span>
           </span>
         </Link>
@@ -59,30 +71,32 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <a
+            href={langHref}
+            className="rounded-md border border-white/20 px-2.5 py-1.5 text-xs font-medium uppercase tracking-wide text-on-accent/85 hover:bg-white/10"
+            hrefLang={otherLocale}
+          >
+            {t.langShort}
+          </a>
+          <a
             href={contactInfo.linkedin}
             target="_blank"
             rel="noreferrer"
             className="text-sm text-on-accent/80 hover:text-on-accent"
           >
-            LinkedIn
+            {t.linkedIn}
           </a>
           {isPending ? (
-            <div className="h-8 w-24 animate-pulse rounded-md bg-white/10" />
+            <div className="h-8 w-16 animate-pulse rounded-md bg-white/10" />
           ) : user ? (
             <div className="flex items-center gap-3">
-              <Link to="/admin" className="text-sm text-accent-2 hover:underline">
-                News desk
-              </Link>
+              {showDesk ? (
+                <Link to="/admin" className="text-sm text-accent-2 hover:underline">
+                  {t.newsDesk}
+                </Link>
+              ) : null}
               <UserButton />
             </div>
-          ) : (
-            <Link
-              to="/login"
-              className="rounded-md bg-accent-2 px-3 py-2 text-sm font-medium text-ink transition-colors hover:bg-accent-2/90"
-            >
-              Editor sign-in
-            </Link>
-          )}
+          ) : null}
         </div>
 
         <button
@@ -109,15 +123,18 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            {user ? (
+            <a
+              href={langHref}
+              className="rounded-md px-3 py-3 text-base text-on-accent hover:bg-white/10"
+              onClick={() => setOpen(false)}
+            >
+              {t.langLabel}
+            </a>
+            {showDesk ? (
               <Link to="/admin" className="rounded-md px-3 py-3 text-base text-accent-2" onClick={() => setOpen(false)}>
-                News desk
+                {t.newsDesk}
               </Link>
-            ) : (
-              <Link to="/login" className="rounded-md px-3 py-3 text-base text-accent-2" onClick={() => setOpen(false)}>
-                Editor sign-in
-              </Link>
-            )}
+            ) : null}
             <a
               href={contactInfo.linkedin}
               target="_blank"
@@ -125,7 +142,7 @@ export function SiteHeader() {
               className="rounded-md px-3 py-3 text-base text-on-accent hover:bg-white/10"
               onClick={() => setOpen(false)}
             >
-              LinkedIn
+              {t.linkedIn}
             </a>
           </nav>
         </div>

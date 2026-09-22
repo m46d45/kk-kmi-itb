@@ -61,8 +61,8 @@ export const aboutCopy = {
 export const contactInfo = {
   faculty: "Faculty of Civil and Environmental Engineering",
   campus: "ITB Ganesha Campus",
-  address: "Jl. Ganesa No. 10, Bandung 40132, West Java, Indonesia",
-  phone: "+62 22 250 4952",
+  address: "CIBE Building, 6th floor · Jl. Ganesa No. 10, Bandung 40132, West Java, Indonesia",
+  phone: "+62 22 8601 0326",
   fax: "+62 22 251 6586",
   email: "kantor_ftsl@itb.ac.id",
   officialPage:

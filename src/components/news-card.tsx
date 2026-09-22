@@ -1,23 +1,29 @@
 import { Link } from "@tanstack/react-router";
 import { format } from "date-fns";
+import { id as localeId } from "date-fns/locale";
 import type { NewsItem } from "@/lib/news";
+import type { Locale } from "@/lib/i18n";
+import { ui } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-export function formatNewsDate(value: string) {
-  return format(new Date(value), "d MMMM yyyy");
+export function formatNewsDate(value: string, locale: Locale = "en") {
+  return format(new Date(value), "d MMMM yyyy", locale === "id" ? { locale: localeId } : undefined);
 }
 
 export function NewsCard({
   item,
   featured = false,
   externalHref,
+  locale = "en",
 }: {
   item: NewsItem;
   featured?: boolean;
   externalHref?: string;
+  locale?: Locale;
 }) {
-  const href = externalHref ?? `/news/${item.slug}`;
   const fromLinkedIn = item.source === "linkedin";
+  const detailTo = locale === "id" ? "/berita/$slug" : "/news/$slug";
+  const t = ui[locale];
   const inner = (
     <>
       <div className="aspect-16/10 overflow-hidden bg-surface-2">
@@ -30,7 +36,7 @@ export function NewsCard({
       <div className={cn("flex flex-1 flex-col", featured ? "p-6 sm:p-8" : "p-5")}>
         <p className="text-xs font-medium uppercase tracking-[0.16em] text-accent-2">
           {fromLinkedIn ? "LinkedIn · " : ""}
-          {item.category} · {formatNewsDate(item.published_at)}
+          {item.category} · {formatNewsDate(item.published_at, locale)}
         </p>
         <h3
           className={cn(
@@ -41,7 +47,7 @@ export function NewsCard({
           {item.title}
         </h3>
         <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-ink-soft">{item.excerpt}</p>
-        <span className="mt-5 text-sm font-medium text-accent">Read more</span>
+        <span className="mt-5 text-sm font-medium text-accent">{t.readMore}</span>
       </div>
     </>
   );
@@ -53,14 +59,14 @@ export function NewsCard({
 
   if (externalHref) {
     return (
-      <a href={href} target="_blank" rel="noreferrer" className={className}>
+      <a href={externalHref} target="_blank" rel="noreferrer" className={className}>
         {inner}
       </a>
     );
   }
 
   return (
-    <Link to="/news/$slug" params={{ slug: item.slug }} className={className}>
+    <Link to={detailTo} params={{ slug: item.slug }} className={className}>
       {inner}
     </Link>
   );
